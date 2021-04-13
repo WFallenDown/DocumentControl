@@ -1,0 +1,199 @@
+{
+  "FileName": "",
+  "FileType": 0,
+  "Tag": null,
+  "Describe": "",
+  "Address": "",
+  "Child": [
+    {
+      "FileName": ".DS_Store",
+      "FileType": 2,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./.DS_Store",
+      "Child": null
+    },
+    {
+      "FileName": ".idea",
+      "FileType": 1,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./.idea",
+      "Child": [
+        {
+          "FileName": ".gitignore",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./.idea/.gitignore",
+          "Child": null
+        },
+        {
+          "FileName": ".name",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./.idea/.name",
+          "Child": null
+        },
+        {
+          "FileName": "DocumentControl.iml",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./.idea/DocumentControl.iml",
+          "Child": null
+        },
+        {
+          "FileName": "inspectionProfiles",
+          "FileType": 1,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./.idea/inspectionProfiles",
+          "Child": [
+            {
+              "FileName": "Project_Default.xml",
+              "FileType": 2,
+              "Tag": null,
+              "Describe": "",
+              "Address": "./.idea/inspectionProfiles/Project_Default.xml",
+              "Child": null
+            }
+          ]
+        },
+        {
+          "FileName": "modules.xml",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./.idea/modules.xml",
+          "Child": null
+        },
+        {
+          "FileName": "workspace.xml",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./.idea/workspace.xml",
+          "Child": null
+        }
+      ]
+    },
+    {
+      "FileName": "bin",
+      "FileType": 1,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./bin",
+      "Child": [
+        {
+          "FileName": ".DS_Store",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./bin/.DS_Store",
+          "Child": null
+        },
+        {
+          "FileName": "mac",
+          "FileType": 1,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./bin/mac",
+          "Child": [
+            {
+              "FileName": "DocControlMac",
+              "FileType": 2,
+              "Tag": null,
+              "Describe": "",
+              "Address": "./bin/mac/DocControlMac",
+              "Child": null
+            },
+            {
+              "FileName": "go_build_test",
+              "FileType": 2,
+              "Tag": null,
+              "Describe": "",
+              "Address": "./bin/mac/go_build_test",
+              "Child": null
+            },
+            {
+              "FileName": "下载.jpeg",
+              "FileType": 2,
+              "Tag": null,
+              "Describe": "",
+              "Address": "./bin/mac/下载.jpeg",
+              "Child": null
+            }
+          ]
+        },
+        {
+          "FileName": "windows",
+          "FileType": 1,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./bin/windows",
+          "Child": [
+            {
+              "FileName": ".DS_Store",
+              "FileType": 2,
+              "Tag": null,
+              "Describe": "",
+              "Address": "./bin/windows/.DS_Store",
+              "Child": null
+            },
+            {
+              "FileName": "DocControlWin.exe",
+              "FileType": 2,
+              "Tag": null,
+              "Describe": "",
+              "Address": "./bin/windows/DocControlWin.exe",
+              "Child": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "FileName": "go.mod",
+      "FileType": 2,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./go.mod",
+      "Child": null
+    },
+    {
+      "FileName": "go.sum",
+      "FileType": 2,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./go.sum",
+      "Child": null
+    },
+    {
+      "FileName": "main.go",
+      "FileType": 2,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./main.go",
+      "Child": null
+    },
+    {
+      "FileName": "test",
+      "FileType": 1,
+      "Tag": null,
+      "Describe": "",
+      "Address": "./test",
+      "Child": [
+        {
+          "FileName": "test.go",
+          "FileType": 2,
+          "Tag": null,
+          "Describe": "",
+          "Address": "./test/test.go",
+          "Child": null
+        }
+      ]
+    }
+  ]
+}
