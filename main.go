@@ -35,6 +35,8 @@ var copyNumber int64
 func main() {
 	work := automaticOperation()
 	if work == true {
+		fmt.Printf("结束")
+		fmt.Scanln(&over)
 		return
 	}
 	selectFolder()
@@ -64,7 +66,6 @@ func automaticOperation() bool {
 		number = i
 		automaticRun()
 	}
-	fmt.Printf("结束")
 	return true
 }
 
@@ -175,27 +176,15 @@ func automaticCopy() {
 	if len(selectFiles) == 0 {
 		return
 	}
-	var c string
-	fmt.Printf("是否需要拷贝？\n")
-	fmt.Printf("1. 是\n")
-	fmt.Printf("2. 否\n")
-	fmt.Scanln(&c)
-	num, err := strconv.Atoi(c)
-	if err != nil {
-		fmt.Printf("请输入序号\n")
-		automaticCopy()
-	}
-	if num == 1 {
-		for _, data := range selectFiles {
-			fmt.Println("开始复制:", data)
-			size, err := copyFile(data)
-			if err != nil {
-				fmt.Println(err)
-			}
-			fmt.Println("\n完成", data, " 大小", humanize.Bytes(uint64(size)))
+	for _, data := range selectFiles {
+		fmt.Println("开始复制:", data)
+		size, err := copyFile(data)
+		if err != nil {
+			fmt.Println(err)
 		}
-		fmt.Printf("=======================================\n")
+		fmt.Println("\n完成", data, " 大小", humanize.Bytes(uint64(size)))
 	}
+	fmt.Printf("=======================================\n")
 }
 
 func copyToLocal() {
@@ -262,7 +251,7 @@ func getFilesAndDirs(dirPth string) (files []string, dirs []string, err error) {
 			con := []string{"AVI", "mov", "rmvb", "rm", "FLV", "mp4", "3GP"}
 			flag := false
 			for _, str := range con {
-				if strings.Contains(fi.Name(),str){
+				if strings.Contains(fi.Name(), str) {
 					flag = true
 					break
 				}
@@ -315,9 +304,9 @@ func getFilesData(dirPth string) (*FilesData, error) {
 func copyFile(srcFileName string) (written int64, err error) {
 	var dstFileName string
 	if number == 1 {
-		dstFileName = "Animations"
+		dstFileName = "."
 	} else if number == 2 {
-		dstFileName = "Flicks"
+		dstFileName = "./Flicks"
 	}
 
 	files := strings.Split(srcFileName, "/")
