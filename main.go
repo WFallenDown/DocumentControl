@@ -7,6 +7,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"io"
 	"io/ioutil"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -14,7 +15,7 @@ import (
 
 type WriteCounter struct {
 	Total int64
-	Item  float64
+	Item  int
 }
 
 type FilesData struct {
@@ -368,16 +369,16 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 
 func (wc *WriteCounter) PrintProgress() {
 	num := float64(wc.Total) / float64(copyNumber)
-	f := num * 100
+	f := int(math.Floor((num * 100) + 0.5))
 
 	if wc.Item == 0.00 {
-		fmt.Printf("进度: [")
+		fmt.Printf("进度: \n")
 		wc.Item += 1
-	} else if wc.Item < 100.00 && f >= wc.Item {
-		fmt.Printf("=")
+	} else if wc.Item < 100 && f >= wc.Item {
+		fmt.Printf("\r %d %%", wc.Item)
 		wc.Item += 1
 	} else if f >= 100 {
-		fmt.Printf("=]\n")
+		fmt.Printf("\r 100%% \n")
 	}
 
 }
