@@ -178,24 +178,14 @@ func automaticCopy() {
 		return
 	}
 	for _, data := range selectFiles {
-		fmt.Println("开始复制:", data)
-		size, err := copyFile(data)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("\n完成", data, " 大小", humanize.Bytes(uint64(size)))
+		go createCopy(data)
 	}
 	fmt.Printf("=======================================\n")
 }
 
 func copyToLocal() {
 	for _, data := range selectFiles {
-		fmt.Println("开始复制:", data)
-		size, err := copyFile(data)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("\n完成", data, " 大小", humanize.Bytes(uint64(size)))
+		go createCopy(data)
 	}
 	fmt.Printf("=======================================\n")
 }
@@ -302,6 +292,15 @@ func getFilesData(dirPth string) (*FilesData, error) {
 	return filesData, nil
 }
 
+func createCopy(data string) {
+	fmt.Println("开始复制:", data)
+	size, err := copyFile(data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("\n完成", data, " 大小", humanize.Bytes(uint64(size)))
+}
+
 func copyFile(srcFileName string) (written int64, err error) {
 	var dstFileName string
 	if number == 1 {
@@ -378,7 +377,7 @@ func (wc *WriteCounter) PrintProgress() {
 		fmt.Printf("\r %d %%", wc.Item)
 		wc.Item += 1
 	} else if f >= 100 {
-		fmt.Printf("\r 100%% \n")
+		fmt.Printf("\r 100%%")
 	}
 
 }
