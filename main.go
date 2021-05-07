@@ -27,13 +27,23 @@ type FilesData struct {
 	Child    []FilesData
 }
 
+type Option struct {
+	Id      int
+	Address string
+	Status  bool
+}
+
 var number int
 var address string
 var selectFiles []string
 var over string
 var copyNumber int64
+var option []Option
 
 func main() {
+	option = append(option, Option{Id: 1, Address: "D:/Animations", Status: true},
+		Option{Id: 2, Address: "D:/Flicks", Status: true},
+		Option{Id: 3, Address: "D:/CG", Status: true})
 	work := automaticOperation()
 	if work == true {
 		fmt.Printf("结束")
@@ -62,16 +72,32 @@ func automaticOperation() bool {
 		return false
 	}
 
-	for i := 1; i <= 2; i++ {
-		selectFiles = []string{}
-		number = i
-		automaticRun()
-	}
+	automaticRun()
 	return true
 }
 
+func checkDirectory() {
+	fmt.Printf("=======================================\n")
+	fmt.Printf("检测文件夹是否存在\n")
+	for _, index := range option {
+		pathExists(&index)
+		if index.Status == false {
+			fmt.Printf("%v不存在，将跳过此文件夹\n", index.Address)
+		}
+	}
+	fmt.Printf("检测完成")
+}
+
 func automaticRun() {
-	runReference()
+
+	checkDirectory()
+	selectFiles = []string{}
+	for _, index := range option {
+		if index.Status {
+			number = index.Id
+			runReference()
+		}
+	}
 	automaticCopy()
 	//createJSONFile()
 }
@@ -82,6 +108,7 @@ func selectFolder() {
 
 	fmt.Printf("1. Animations\n")
 	fmt.Printf("2. Flicks\n")
+	fmt.Printf("3. CG\n")
 	fmt.Printf("0. 退出\n")
 
 	var input string
@@ -115,23 +142,31 @@ func runReference() {
 	var referenceDirs []string
 	var localFiles []string
 	var localDirs []string
-	if number == 1 {
+	switch number {
+	case 1:
 		localFiles, localDirs, _ = getFilesAndDirs("./Animations")
-	} else if number == 2 {
-		localFiles, localDirs, _ = getFilesAndDirs("./Flicks")
-	}
-	if address == "" {
-		if number == 1 {
+		if address == "" {
 			referenceFiles, referenceDirs, _ = getFilesAndDirs("D:/Animations")
-		} else if number == 2 {
+		} else {
+			referenceFiles, referenceDirs, _ = getFilesAndDirs(address)
+		}
+		break
+	case 2:
+		localFiles, localDirs, _ = getFilesAndDirs("./Flicks")
+		if address == "" {
 			referenceFiles, referenceDirs, _ = getFilesAndDirs("D:/Flicks")
-		}
-	} else {
-		if number == 1 {
-			referenceFiles, referenceDirs, _ = getFilesAndDirs(address)
-		} else if number == 2 {
+		} else {
 			referenceFiles, referenceDirs, _ = getFilesAndDirs(address)
 		}
+		break
+	case 3:
+		localFiles, localDirs, _ = getFilesAndDirs("./CG")
+		if address == "" {
+			referenceFiles, referenceDirs, _ = getFilesAndDirs("D:/CG")
+		} else {
+			referenceFiles, referenceDirs, _ = getFilesAndDirs(address)
+		}
+		break
 	}
 
 	for _, localTable := range localDirs {
@@ -341,12 +376,12 @@ func copyFile(srcFileName string) (written int64, err error) {
 }
 
 //pathExists 判断文件夹是否存在
-func pathExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
+func pathExists(data *Option) {
+	_, err := os.Stat(data.Address)
+	if err != nil {
+		data.Status = false
 	}
-	if os.IsNotExist(err) {
+	/*if os.IsNotExist(err) {
 		// 创建文件夹
 		err := os.MkdirAll(path, os.ModePerm)
 		if err != nil {
@@ -354,8 +389,7 @@ func pathExists(path string) (bool, error) {
 		} else {
 			return true, nil
 		}
-	}
-	return false, err
+	}*/
 }
 
 func (wc *WriteCounter) Write(p []byte) (int, error) {
