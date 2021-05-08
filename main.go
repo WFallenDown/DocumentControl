@@ -11,6 +11,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type WriteCounter struct {
@@ -37,8 +38,10 @@ var number int
 var address string
 var selectFiles []string
 var over string
-var copyNumber int64
 var option []Option
+var fileTotal int64
+var fileSize int64
+var lock sync.Mutex
 
 func main() {
 	option = append(option, Option{Id: 1, Address: "D:/Animations", Status: true},
@@ -213,15 +216,55 @@ func automaticCopy() {
 		return
 	}
 	for _, data := range selectFiles {
-		go createCopy(data)
+		dataName, err := os.Stat(data)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fileTotal += dataName.Size()
 	}
+	fmt.Printf("开始复制:")
+
+	var c []chan bool
+
+	for index, data := range selectFiles {
+		c = append(c, make(chan bool))
+		go createCopy(data, c[index])
+	}
+	for _, data := range c {
+		if <-data == false {
+			return
+		}
+	}
+	fmt.Println("\n完成,大小总共", humanize.Bytes(uint64(fileSize)))
+
 	fmt.Printf("=======================================\n")
 }
 
 func copyToLocal() {
 	for _, data := range selectFiles {
-		go createCopy(data)
+		dataName, err := os.Stat(data)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fileTotal += dataName.Size()
 	}
+	fmt.Printf("开始复制:")
+
+	var c []chan bool
+
+	for index, data := range selectFiles {
+		c = append(c, make(chan bool))
+		go createCopy(data, c[index])
+	}
+	for _, data := range c {
+		if <-data == false {
+			return
+		}
+	}
+	fmt.Println("\n完成,大小总共", humanize.Bytes(uint64(fileSize)))
+
 	fmt.Printf("=======================================\n")
 }
 
@@ -327,13 +370,15 @@ func getFilesData(dirPth string) (*FilesData, error) {
 	return filesData, nil
 }
 
-func createCopy(data string) {
-	fmt.Println("开始复制:", data)
-	size, err := copyFile(data)
+func createCopy(data string, c chan bool) {
+
+	_, err := copyFile(data)
 	if err != nil {
 		fmt.Println(err)
+		c <- false
 	}
-	fmt.Println("\n完成", data, " 大小", humanize.Bytes(uint64(size)))
+	c <- true
+	close(c)
 }
 
 func copyFile(srcFileName string) (written int64, err error) {
@@ -369,9 +414,7 @@ func copyFile(srcFileName string) (written int64, err error) {
 	writer := bufio.NewWriter(dstFile)
 	defer dstFile.Close()
 
-	dataName, err := os.Stat(srcFileName)
 	counter := &WriteCounter{}
-	copyNumber = dataName.Size()
 	return io.Copy(writer, io.TeeReader(reader, counter))
 }
 
@@ -394,24 +437,18 @@ func pathExists(data *Option) {
 
 func (wc *WriteCounter) Write(p []byte) (int, error) {
 	n := len(p)
-	wc.Total += int64(n)
+	wc.Total = int64(n)
 
 	wc.PrintProgress()
 	return n, nil
 }
 
 func (wc *WriteCounter) PrintProgress() {
-	num := float64(wc.Total) / float64(copyNumber)
+	lock.Lock()
+	fileSize += wc.Total
+	num := float64(fileSize) / float64(fileTotal)
 	f := int(math.Floor((num * 100) + 0.5))
 
-	if wc.Item == 0.00 {
-		fmt.Printf("进度: \n")
-		wc.Item += 1
-	} else if wc.Item < 100 && f >= wc.Item {
-		fmt.Printf("\r %d %%", wc.Item)
-		wc.Item += 1
-	} else if f >= 100 {
-		fmt.Printf("\r 100%%")
-	}
-
+	fmt.Printf("\r %d %%", f)
+	lock.Unlock()
 }
