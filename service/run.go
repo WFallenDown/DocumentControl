@@ -33,7 +33,7 @@ var lock sync.Mutex
 
 func (data *CopyFile) New() {
 	data.OptionData = append(data.OptionData,
-		Option{Id: 1, Address: "D:/Animations", Local: "./Animations", Status: true},
+		Option{Id: 1, Address: "D:/Animations", Local: ".", Status: true},
 		Option{Id: 2, Address: "D:/Flicks", Local: "./Flicks", Status: true},
 		Option{Id: 3, Address: "D:/CG", Local: "./CG", Status: true})
 }
@@ -222,7 +222,7 @@ func (data *CopyFile) RunReference() {
 	}
 
 	for _, selectFile := range data.SelectFiles {
-		fmt.Printf("缺少[%s]\n", selectFile.Address)
+		fmt.Printf("\n缺少[%s]\n", selectFile.Address)
 	}
 }
 

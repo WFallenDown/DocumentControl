@@ -75,14 +75,14 @@ func copyToLocal() {
 	fmt.Printf("开始复制:")
 	service.FileTotal = item.FileTotal
 	service.FileSize = item.FileSize
-	var c []chan bool
+	var c []chan string
 
 	for index, data := range item.SelectFiles {
-		c = append(c, make(chan bool))
-		go service.CreateCopy(&data, c[index])
+		c = append(c, make(chan string))
+		go service.CreateCopy(data, c[index])
 	}
 	for _, data := range c {
-		if <-data == false {
+		if <-data == "error" {
 			return
 		}
 	}

@@ -53,28 +53,31 @@ func automaticCopy() {
 		return
 	}
 	for _, data := range item.SelectFiles {
-		dataName, err := os.Stat(data.Local)
+		dataName, err := os.Stat(data.Address)
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		item.FileTotal += dataName.Size()
 	}
-	fmt.Printf("开始复制:")
+	fmt.Printf("\n开始复制:\n")
 	service.FileTotal = item.FileTotal
-	service.FileSize = item.FileSize
-	var c []chan bool
+	service.FileSize = 0
+
+	fmt.Println(humanize.Bytes(uint64(service.FileTotal)))
+
+	var c []chan string
 
 	for index, data := range item.SelectFiles {
-		c = append(c, make(chan bool))
-		go service.CreateCopy(&data, c[index])
+		c = append(c, make(chan string))
+		go service.CreateCopy(data, c[index])
 	}
 	for _, data := range c {
-		if <-data == false {
+		if <-data == "error" {
 			return
 		}
 	}
-	fmt.Println("\n完成,大小总共", humanize.Bytes(uint64(item.FileSize)))
+	fmt.Println("\n完成,大小总共", humanize.Bytes(uint64(service.FileSize)))
 
 	fmt.Printf("=======================================\n")
 }

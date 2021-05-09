@@ -12,14 +12,14 @@ import (
 var FileTotal int64
 var FileSize int64
 
-func CreateCopy(data *Option, c chan bool) {
+func CreateCopy(data Option, c chan string) {
 
-	_, err := copyFile(*data)
+	_, err := copyFile(data)
 	if err != nil {
 		fmt.Println(err)
-		c <- false
+		c <- "error"
 	}
-	c <- true
+	c <- data.Address
 	close(c)
 }
 
