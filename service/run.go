@@ -227,13 +227,21 @@ func (data *CopyFile) RunReference() {
 	}
 }
 
-func (data *CopyFile) CreateCopy() {
+func (data *CopyFile) CreateCopy(index int) {
 
-	for _, data := range data.SelectFiles {
-		wg.Add(1)
-		go copyFile(data)
+	num := 0
+
+	for i := index; i < i+10; i++ {
+		if i < len(data.SelectFiles) {
+			wg.Add(1)
+			go copyFile(data.SelectFiles[i])
+			num = i
+		}
 	}
 	wg.Wait()
+	if num < len(data.SelectFiles)-1 {
+		data.CreateCopy(num + 1)
+	}
 }
 
 //获取指定目录下的所有文件和目录
