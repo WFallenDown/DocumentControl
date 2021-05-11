@@ -64,7 +64,7 @@ func automaticCopy() {
 	service.FileTotal = item.FileTotal
 	service.FileSize = 0
 
-	fmt.Println(humanize.Bytes(uint64(service.FileTotal)))
+	item.CreateCopy(0)
 
 	fmt.Println("\n完成,大小总共", humanize.Bytes(uint64(service.FileSize)))
 

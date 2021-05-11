@@ -75,17 +75,9 @@ func copyToLocal() {
 	fmt.Printf("开始复制:")
 	service.FileTotal = item.FileTotal
 	service.FileSize = item.FileSize
-	var c []chan string
 
-	for index, data := range item.SelectFiles {
-		c = append(c, make(chan string))
-		go service.CreateCopy(data, c[index])
-	}
-	for _, data := range c {
-		if <-data == "error" {
-			return
-		}
-	}
+	item.CreateCopy(0)
+
 	fmt.Println("\n完成,大小总共", humanize.Bytes(uint64(item.FileSize)))
 
 	fmt.Printf("=======================================\n")
