@@ -12,17 +12,6 @@ import (
 var FileTotal int64
 var FileSize int64
 
-func CreateCopy(data Option, c chan string) {
-
-	_, err := copyFile(data)
-	if err != nil {
-		fmt.Println(err)
-		c <- "error"
-	}
-	c <- data.Address
-	close(c)
-}
-
 func copyFile(path Option) (written int64, err error) {
 	dstFileName := path.Local
 
@@ -52,7 +41,11 @@ func copyFile(path Option) (written int64, err error) {
 	defer dstFile.Close()
 
 	counter := &WriteCounter{}
-	return io.Copy(writer, io.TeeReader(reader, counter))
+	data, err := io.Copy(writer, io.TeeReader(reader, counter))
+
+	defer wg.Done()
+
+	return data, nil
 }
 
 func (wc *WriteCounter) Write(p []byte) (int, error) {

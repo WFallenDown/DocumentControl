@@ -30,6 +30,7 @@ type CopyFile struct {
 }
 
 var lock sync.Mutex
+var wg sync.WaitGroup
 
 func (data *CopyFile) New() {
 	data.OptionData = append(data.OptionData,
@@ -224,6 +225,15 @@ func (data *CopyFile) RunReference() {
 	for _, selectFile := range data.SelectFiles {
 		fmt.Printf("\n缺少[%s]\n", selectFile.Address)
 	}
+}
+
+func (data *CopyFile) CreateCopy() {
+
+	for _, data := range data.SelectFiles {
+		wg.Add(1)
+		go copyFile(data)
+	}
+	wg.Wait()
 }
 
 //获取指定目录下的所有文件和目录
