@@ -57,7 +57,7 @@ func selectReferenceFile() {
 	item.NewByNumber(number, address)
 	item.RunReference()
 	copyToLocal()
-	createJSONFile()
+	//createJSONFile()
 }
 
 func copyToLocal() {
